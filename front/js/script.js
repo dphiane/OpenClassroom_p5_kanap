@@ -6,7 +6,7 @@
 	.then(response => response.json())
 	.then((data) => {console.log(data)
 
-    let items= document.getElementById("items");//Partie Item HTML
+    let items= document.getElementById("items");//récuperez items dans HTML
 
         for (i=0; i < data.length; i++){//Appel des produits dans le tableau
             const PRODUCTCARD=`
@@ -20,4 +20,4 @@
             items.innerHTML +=PRODUCTCARD;//Ajout des constant HTML
         }})
     };
-    cardsFetch();
+    cardsFetch();//Appel fonction
