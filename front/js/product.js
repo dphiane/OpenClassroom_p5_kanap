@@ -14,22 +14,27 @@ let cardsFetch= function(){
   .then(response => response.json())
   .then(data => {console.log(data) 
 
-let item_img= document.getElementsByClassName('item_img');
-item_img.innerHTML=`<img src="${data.imageUrl}" alt="${data.altTxt}">;`
+    let item__img= document.getElementsByClassName("item__img")
+    console.log(item__img)
+    item__img.innerHTML="dom"
+    console.log(item__img)
+item__img.innerHTML=`<img src="${data.imageUrl}" alt="${data.altTxt}>`
 console.log(data.imageUrl)
 
-let title=document.getElementById('title')
-title.innerHTML=`${data.name}`
+document.getElementById('title').innerHTML=`${data.name}`//ajout titre
+document.getElementById('description').innerHTML=`${data.description}`//ajout description
+document.getElementById('price').innerHTML=`${data.price}`//ajout prix
 
-let description=document.getElementById('description');
-description.innerHTML=`${data.description}`
+for (let i=0; i<data.colors.length;i++){//tableau a parcourir par i pour les options 
+  let select=document.getElementById('colors')//selection de la partie choisi une couleur
+  let option= document.createElement ('option')// création des options de couleur
 
-let price=document.getElementById('price')
-price.innerHTML=`${data.price}`
+  option.innerHTML=`${data.colors[i]}`// ajout des options de couleur dans HTML
+  option.value=`${data.colors[i]}`// ajout de la valeur des couleur back
 
-/* let colors_first=document.createElement('colors')
-colors */
-})}
+  select.appendChild(option)// option enfant de select
+}
+})} 
   
 cardsFetch()
 
