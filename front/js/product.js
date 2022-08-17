@@ -28,3 +28,22 @@ for (let i=0; i<data.colors.length;i++){//tableau a parcourir par i pour les opt
 })} 
 
 cardsFetch()
+
+let addToCart=document.getElementById("addToCart")
+  addToCart.addEventListener("click",(event)=>{
+    event.preventDefault();
+      fetch(URL+id)
+        .then(response => response.json())
+        .then(data => { 
+            let productToCart={
+              productId:`${data._id}`,
+              productName:`${data.name}`,
+              quantityProduct:quantity.value,
+              colorValue:colors.value
+            } 
+console.log(productToCart)
+
+        }
+        )
+  }
+  )
