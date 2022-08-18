@@ -28,22 +28,54 @@ for (let i=0; i<data.colors.length;i++){//tableau a parcourir par i pour les opt
 })} 
 
 cardsFetch()
-
+// Ecoute du bouton ajouter au panier
 let addToCart=document.getElementById("addToCart")
-  addToCart.addEventListener("click",(event)=>{
-    event.preventDefault();
-      fetch(URL+id)
-        .then(response => response.json())
-        .then(data => { 
-            let productToCart={
-              productId:`${data._id}`,
-              productName:`${data.name}`,
-              quantityProduct:quantity.value,
-              colorValue:colors.value
-            } 
-console.log(productToCart)
+addToCart.addEventListener("click",(event)=>{
+event.preventDefault();
 
-        }
-        )
+fetch(URL+id)
+.then(response => response.json())
+.then(data => {
+//condition quantité
+if(quantity.value<=0){
+  alert("Veuillez indiquer la quantité souhaité")
+}
+//condition couleur
+else if (colors.value==0){
+  alert("Veuillez indiquer la couleur souhaité")
+}
+else{
+//Création variable du tableau contenant les informations du produit pour le panier
+let productToCart={
+  productName:`${data.name}`,
+  productId:`${data._id}`,
+  colorValue:colors.value,
+  quantityProduct:quantity.value,
+} 
+
+//création de la variable des produits du panier qui sera stockée dans le local storage
+let productLocalStorage=JSON.parse(localStorage.getItem("product"));
+
+//s'il a deja des produits enregistrés dans le local storage
+if(productLocalStorage){
+productLocalStorage.push(productToCart);
+localStorage.setItem("product",JSON.stringify(productLocalStorage));
+}
+// si il n y a pas de produit d'enregistré dans le local storage
+else{
+  productLocalStorage=[];
+  productLocalStorage.push(productToCart);
+  localStorage.setItem("product",JSON.stringify(productLocalStorage));
+}
+// fenêtre d'affichage de confirmation
+let popUpConfirm=function(){
+  if (window.confirm(`${data.name} de la couleur ${colors.value} a bien été ajouter au panier
+Pour continuer vos achats cliquer sur OK ou ANNULER pour aller au panier`)){
+  window.location.href= "index.html"
+  }else{
+  window.location.href= "cart.html"
   }
-  )
+}
+console.log(productLocalStorage)
+popUpConfirm()
+}})})
