@@ -1,12 +1,10 @@
 let productLocalStorage=JSON.parse(localStorage.getItem("product"));//Json vers javascript
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 
-
-
 for (i=0;i < productLocalStorage.length; i++){//parcour le tableau product dans le local storage
 //constante pour l'affichage du panier via les éléments du local storage   
     const PRODUCTCART=`
-    <article class='cart__item' data-id='{product-ID}' data-color='{product-color}'>
+    <article class='cart__item' data-id='{${productLocalStorage[i].productId}' data-color='${productLocalStorage[i].colorValue}'>
     <div class='cart__item__img'>
       <img src='${productLocalStorage[i].imgProduct}' alt='${productLocalStorage[i].altProduct}'>
     </div>
@@ -29,3 +27,12 @@ for (i=0;i < productLocalStorage.length; i++){//parcour le tableau product dans 
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 }
+
+let inputQuantity=document.querySelectorAll(".itemQuantity")
+
+for (k of inputQuantity){
+    k.addEventListener("change",(event)=>{
+        event.preventDefault();
+});
+}
+console.log(inputQuantity)
