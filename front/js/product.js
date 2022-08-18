@@ -44,11 +44,14 @@ if(quantity.value<=0){
 else if (colors.value==0){
   alert("Veuillez indiquer la couleur souhaité")
 }
-else{
+else{//si quantité & couleur Ok alors crée produit panier
 //Création variable du tableau contenant les informations du produit pour le panier
 let productToCart={
   productName:`${data.name}`,
   productId:`${data._id}`,
+  price:`${data.price}`,
+  imgProduct:`${data.imageUrl}`,
+  altProduct:`${data.altTxt}`,
   colorValue:colors.value,
   quantityProduct:quantity.value,
 } 
@@ -76,6 +79,5 @@ Pour continuer vos achats cliquer sur OK ou ANNULER pour aller au panier`)){
   window.location.href= "cart.html"
   }
 }
-console.log(productLocalStorage)
 popUpConfirm()
 }})})
