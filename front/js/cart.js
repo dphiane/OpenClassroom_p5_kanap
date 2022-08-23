@@ -27,41 +27,35 @@ for (i=0;i < productLocalStorage.length; i++){//parcour le tableau product dans 
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 }
-
-let inputQuantity=document.querySelectorAll(".itemQuantity")
-for (let i =0; i<inputQuantity.length; i++){
+/*Changement de quantité*/
+let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la class dans le dom
+for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
   inputQuantity[i].addEventListener("change",(event)=>{
-    let newValue=event.target.value
-    console.log(newValue)
-    let items=inputQuantity[i].closest("article")
+    let newValue=event.target.value//on écoute la valeur ciblé
+    let items=inputQuantity[i].closest("article")//sert à récupérer l'objet le plus proche
       for (let k in productLocalStorage){
-        if (productLocalStorage[k].productId== items.dataset.id &&
+        if (productLocalStorage[k].productId== items.dataset.id &&//compare id & couleur
           productLocalStorage[k].colorValue== items.dataset.color)
           {
-            (productLocalStorage[k].quantityProduct= parseInt(newValue)),
-            localStorage.setItem("product",JSON.stringify(productLocalStorage))
-            console.log(productLocalStorage[k].quantityProduct)
-      
-    }
+            (productLocalStorage[k].quantityProduct= parseInt(newValue)),// change la nouvelle valeur du dom vers le local storage
+            localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
+          }
 }})}
 
-
-let deleteBtn=document.querySelectorAll(".deleteItem")
+/*suprimer article*/
+let deleteBtn=document.querySelectorAll(".deleteItem")// récupère les boutons supprimer
 console.log(deleteBtn)
-for (let i=0; i< deleteBtn.length;i++){
+for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
     deleteBtn[i].addEventListener("click",(event)=>{
         event.preventDefault()
         let removeProduct=deleteBtn[i].closest("article")
-        removeProduct.remove()
+        removeProduct.remove()//supprimer du dom
         const productToDeleteId=removeProduct.dataset.id
         const productToDeleteColor=removeProduct.dataset.color
-        console.log(productToDeleteId)
 
-        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)
-        
-        console.log(productLocalStorage)
-        localStorage.setItem("product",JSON.stringify(productToRemove))
-        console.log(productToRemove)
+        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
+
+        localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
     })}
  
 
