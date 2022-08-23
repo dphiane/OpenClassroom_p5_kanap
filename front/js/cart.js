@@ -31,13 +31,19 @@ cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 let inputQuantity=document.querySelectorAll(".itemQuantity")
 for (let i =0; i<inputQuantity.length; i++){
   inputQuantity[i].addEventListener("change",(event)=>{
-    event.preventDefault()
-    let inputNewQuantity=inputQuantity[i].closest("article")
-    console.log(inputNewQuantity)
-    let inputValue=event.target.value
-    console.log(inputValue)
-  })
-}
+    let newValue=event.target.value
+    console.log(newValue)
+    let items=inputQuantity[i].closest("article")
+      for (let k in productLocalStorage){
+        if (productLocalStorage[k].productId== items.dataset.id &&
+          productLocalStorage[k].colorValue== items.dataset.color)
+          {
+            (productLocalStorage[k].quantityProduct= parseInt(newValue)),
+            localStorage.setItem("product",JSON.stringify(productLocalStorage))
+            console.log(productLocalStorage[k].quantityProduct)
+      
+    }
+}})}
 
 
 let deleteBtn=document.querySelectorAll(".deleteItem")

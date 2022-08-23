@@ -50,6 +50,9 @@ let productToCart={
   productId:`${data._id}`,
   colorValue:colors.value,
   quantityProduct:quantity.value,
+  imgProduct:`${data.imageUrl}`,
+  altProduct:`${data.altTxt}`,
+  productName:`${data.name}`,
 } 
 
 //création de la variable des produits du panier qui sera stockée dans le local storage
