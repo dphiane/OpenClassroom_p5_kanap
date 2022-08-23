@@ -47,11 +47,7 @@ else if (colors.value==0){
 else{//si quantité & couleur Ok alors crée produit panier
 //Création variable du tableau contenant les informations du produit pour le panier
 let productToCart={
-  productName:`${data.name}`,
   productId:`${data._id}`,
-  price:`${data.price}`,
-  imgProduct:`${data.imageUrl}`,
-  altProduct:`${data.altTxt}`,
   colorValue:colors.value,
   quantityProduct:quantity.value,
 } 
@@ -61,15 +57,30 @@ let productLocalStorage=JSON.parse(localStorage.getItem("product"));
 
 //s'il a deja des produits enregistrés dans le local storage
 if(productLocalStorage){
-productLocalStorage.push(productToCart);
-localStorage.setItem("product",JSON.stringify(productLocalStorage));
+  const alreadyIn = productLocalStorage.find(
+    (obj) =>
+      obj.productId === productToCart.productId &&
+      obj.colorValue ===productToCart.colorValue
+  )
+if(alreadyIn){
+  console.log(alreadyIn)
+  let fixQuantity =
+          parseInt(productToCart.quantityProduct) +
+          parseInt(alreadyIn.quantityProduct);
+        alreadyIn.quantityProduct = fixQuantity;
+        localStorage.setItem("product", JSON.stringify(productLocalStorage));
 }
-// si il n y a pas de produit d'enregistré dans le local storage
 else{
+  productLocalStorage.push(productToCart);
+  localStorage.setItem("product", JSON.stringify(productLocalStorage));
+}
+}
+
+else{// si il n y a pas de produit d'enregistré dans le local storage
   productLocalStorage=[];
   productLocalStorage.push(productToCart);
   localStorage.setItem("product",JSON.stringify(productLocalStorage));
-}
+} 
 // fenêtre d'affichage de confirmation
 let popUpConfirm=function(){
   if (window.confirm(`${data.name} de la couleur ${colors.value} a bien été ajouter au panier

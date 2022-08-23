@@ -1,10 +1,10 @@
 let productLocalStorage=JSON.parse(localStorage.getItem("product"));//Json vers javascript
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
-
+console.log(productLocalStorage)
 for (i=0;i < productLocalStorage.length; i++){//parcour le tableau product dans le local storage
 //constante pour l'affichage du panier via les éléments du local storage   
     const PRODUCTCART=`
-    <article class='cart__item' data-id='{${productLocalStorage[i].productId}' data-color='${productLocalStorage[i].colorValue}'>
+    <article class='cart__item' data-id='${productLocalStorage[i].productId}' data-color='${productLocalStorage[i].colorValue}'>
     <div class='cart__item__img'>
       <img src='${productLocalStorage[i].imgProduct}' alt='${productLocalStorage[i].altProduct}'>
     </div>
@@ -29,10 +29,35 @@ cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 }
 
 let inputQuantity=document.querySelectorAll(".itemQuantity")
-
-for (k of inputQuantity){
-    k.addEventListener("change",(event)=>{
-        event.preventDefault();
-});
+for (let i =0; i<inputQuantity.length; i++){
+  inputQuantity[i].addEventListener("change",(event)=>{
+    event.preventDefault()
+    let inputNewQuantity=inputQuantity[i].closest("article")
+    console.log(inputNewQuantity)
+    let inputValue=event.target.value
+    console.log(inputValue)
+  })
 }
-console.log(inputQuantity)
+
+
+let deleteBtn=document.querySelectorAll(".deleteItem")
+console.log(deleteBtn)
+for (let i=0; i< deleteBtn.length;i++){
+    deleteBtn[i].addEventListener("click",(event)=>{
+        event.preventDefault()
+        let removeProduct=deleteBtn[i].closest("article")
+        removeProduct.remove()
+        const productToDeleteId=removeProduct.dataset.id
+        const productToDeleteColor=removeProduct.dataset.color
+        console.log(productToDeleteId)
+
+        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)
+        
+        console.log(productLocalStorage)
+        localStorage.setItem("product",JSON.stringify(productToRemove))
+        console.log(productToRemove)
+    })}
+ 
+
+
+
