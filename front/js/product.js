@@ -60,23 +60,22 @@ let productLocalStorage=JSON.parse(localStorage.getItem("product"));
 
 //s'il a deja des produits enregistrés dans le local storage
 if(productLocalStorage){
-  const alreadyIn = productLocalStorage.find(
+  const alreadyIn = productLocalStorage.find(//création constant pour vérifier si les id & couleurs sont =
     (obj) =>
       obj.productId === productToCart.productId &&
       obj.colorValue ===productToCart.colorValue
   )
-if(alreadyIn){
-  console.log(alreadyIn)
+if(alreadyIn){//si est deja la alors on additionne le produit + celui dans le localstorage
   let fixQuantity =
           parseInt(productToCart.quantityProduct) +
           parseInt(alreadyIn.quantityProduct);
         alreadyIn.quantityProduct = fixQuantity;
         localStorage.setItem("product", JSON.stringify(productLocalStorage));
 }
-else{
-  productLocalStorage.push(productToCart);
+else{//si id & couleur != alors ajoute un nouveau produit
+  productLocalStorage.push(productToCart);//sinon ajoute seulement le produit
   localStorage.setItem("product", JSON.stringify(productLocalStorage));
-}
+} 
 }
 
 else{// si il n y a pas de produit d'enregistré dans le local storage
