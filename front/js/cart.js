@@ -1,24 +1,22 @@
-let productLocalStorage=JSON.parse(localStorage.getItem("product"));//Json vers javascript
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
-let kanapInfos = JSON.parse(localStorage.getItem("product"));
+let kanapInfos = JSON.parse(localStorage.getItem("product"));//Json vers javascript
 
-if (kanapInfos) {
-    for (let product of kanapInfos) {
-        let item = {
+
+    for (let product of kanapInfos) {//parcours localstorage
+        let item = {//création variable du localstorage
             Id: product.productId,
             color: product.colorValue,
             quantity: product.quantityProduct,
         }
          
-        fetch("http://localhost:3000/api/products/" + item.Id)
+        fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction de id
             .then(function(res) {
                 if (res.ok) {
                     return res.json();
                 }
             })
-        .then(function(product) {
-//parcour le tableau product dans le local storage
-//constante pour l'affichage du panier via les éléments du local storage   
+        .then(function(product) {//retourne les caractéristiques des produits du panier
+
     const PRODUCTCART=`
     <article class='cart__item' data-id='${item.Id}' data-color='${item.color}'>
     <div class='cart__item__img'>
@@ -42,7 +40,7 @@ if (kanapInfos) {
     </div>
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
-})}}
+})}
 /*Changement de quantité*/
 let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la class dans le dom
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
