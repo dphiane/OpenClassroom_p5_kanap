@@ -45,22 +45,23 @@ let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la cla
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
   inputQuantity[i].addEventListener("change",(event)=>{
     let newValue=event.target.value//on écoute la valeur ciblé
+    if (newValue<=0 || newValue >=100 ||isNaN(newValue)){
+      alert ("Veuillez choisir une quantité entre 1 et 100")
+      newValue=1
+    }
     let items=inputQuantity[i].closest("article")//sert à récupérer l'objet le plus proche
-    console.log(items)
-    console.log(newValue)
+
       for (let k in productLocalStorage){
         if (productLocalStorage[k].productId=== items.dataset.id &&//compare id & couleur
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-          console.log(parseInt(newValue))
           }
 }
 })}
 
 /*suprimer article*/
 let deleteBtn=document.querySelectorAll(".deleteItem")// récupère les boutons supprimer
-console.log(deleteBtn)
 for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
     deleteBtn[i].addEventListener("click",(event)=>{
         event.preventDefault()
@@ -72,22 +73,32 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
 
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
-    })}})
+    })}
   //total quantité
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
   let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
 
   for (i=0; i<productLocalStorage.length;i++){//boucle quantité dans le local storage
       let sumQuantityLocal=productLocalStorage[i].quantityProduct
-      console.log(sumQuantityLocal)
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
   } 
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
  const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML 
+
+//prix Total
+  totalPrice=document.getElementById("totalPrice")
+  let total=0
+  for ( prod of productLocalStorage) {
+    const productTotal = product.price * item.quantity;
+    total = productTotal+total;
+  
+  console.log(productTotal)
 }
 
- 
+totalPrice.innerHTML=total
+})}
+
 
 
 
