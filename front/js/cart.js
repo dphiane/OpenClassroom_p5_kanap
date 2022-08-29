@@ -1,21 +1,20 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
-let kanapInfos = JSON.parse(localStorage.getItem("product"));//Json vers javascript
+let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
 
-
-    for (let product of kanapInfos) {//parcours localstorage
-        let item = {//création variable du localstorage
-            Id: product.productId,
-            color: product.colorValue,
-            quantity: product.quantityProduct,
-        }
+for (let product of productLocalStorage) {//parcours localstorage
+      let item = {//création variable du localstorage
+        Id: product.productId,
+        color: product.colorValue,
+        quantity: product.quantityProduct,
+}
          
-        fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction de id
-            .then(function(res) {
-                if (res.ok) {
-                    return res.json();
-                }
-            })
-        .then(function(product) {//retourne les caractéristiques des produits du panier
+fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction de id
+    .then(function(res) {
+        if (res.ok) {
+            return res.json();
+        }
+    })
+.then(function(product) {//retourne les caractéristiques des produits du panier
 
     const PRODUCTCART=`
     <article class='cart__item' data-id='${item.Id}' data-color='${item.color}'>
@@ -40,21 +39,24 @@ let kanapInfos = JSON.parse(localStorage.getItem("product"));//Json vers javascr
     </div>
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
-})}
+
 /*Changement de quantité*/
 let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la class dans le dom
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
   inputQuantity[i].addEventListener("change",(event)=>{
     let newValue=event.target.value//on écoute la valeur ciblé
     let items=inputQuantity[i].closest("article")//sert à récupérer l'objet le plus proche
+    console.log(items)
+    console.log(newValue)
       for (let k in productLocalStorage){
-        if (productLocalStorage[k].productId== items.dataset.id &&//compare id & couleur
-          productLocalStorage[k].colorValue== items.dataset.color)
-          {
-            (productLocalStorage[k].quantityProduct= parseInt(newValue)),// change la nouvelle valeur du dom vers le local storage
+        if (productLocalStorage[k].productId=== items.dataset.id &&//compare id & couleur
+          productLocalStorage[k].colorValue=== items.dataset.color){
+            productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
+          console.log(parseInt(newValue))
           }
-}})}
+}
+})}
 
 /*suprimer article*/
 let deleteBtn=document.querySelectorAll(".deleteItem")// récupère les boutons supprimer
@@ -70,7 +72,21 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
 
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
-    })}
+    })}})
+  //total quantité
+  totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
+  let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
+
+  for (i=0; i<productLocalStorage.length;i++){//boucle quantité dans le local storage
+      let sumQuantityLocal=productLocalStorage[i].quantityProduct
+      console.log(sumQuantityLocal)
+      sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
+  } 
+ const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
+ const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
+ totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML 
+}
+
  
 
 
