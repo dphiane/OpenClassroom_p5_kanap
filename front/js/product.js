@@ -49,7 +49,7 @@ else{//si quantité & couleur Ok alors crée produit panier
 let productToCart={
   productId:`${data._id}`,
   colorValue:colors.value,
-  quantityProduct:quantity.value,
+  quantityProduct:Number(quantity.value),
   imgProduct:`${data.imageUrl}`,
   altProduct:`${data.altTxt}`,
   productName:`${data.name}`,
