@@ -1,5 +1,6 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
+let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
 let total=[]
 for (let product of productLocalStorage) {//parcours localstorage
       let item = {//création variable du localstorage
@@ -56,8 +57,7 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-          document.location.reload()
-            calculateTotalPrice()
+
           }
 }
 })}
@@ -73,20 +73,21 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         const productToDeleteColor=removeProduct.dataset.color
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
-        document.location.reload()
+        
       })}
   //total quantité
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
-  let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
+ 
+function updatequantity(){
 
-  for (i=0; i<productLocalStorage.length;i++){//boucle quantité dans le local storage
-      let sumQuantityLocal=productLocalStorage[i].quantityProduct
+      let sumQuantityLocal=item.quantity
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
-  } 
+  console.log(sumQuantityHtml)
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
  const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML 
-
+}
+updatequantity()
 //prix Total
   totalPrice=document.getElementById("totalPrice")
 function calculateTotalPrice(){
