@@ -56,6 +56,8 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
+          document.location.reload()
+            calculateTotalPrice()
           }
 }
 })}
@@ -69,11 +71,10 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         removeProduct.remove()//supprimer du dom
         const productToDeleteId=removeProduct.dataset.id
         const productToDeleteColor=removeProduct.dataset.color
-
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
-
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
-    })}
+        document.location.reload()
+      })}
   //total quantité
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
   let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
@@ -88,16 +89,15 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
 
 //prix Total
   totalPrice=document.getElementById("totalPrice")
-
- 
-    const productTotal = parseInt(product.price) * item.quantity;
+function calculateTotalPrice(){
+    
+    const productTotal = product.price * item.quantity;
     total.push(productTotal)
-    console.log(item.quantity)
-
-   let totalF = total.reduce((a,b)=>a+b);
-
-
-totalPrice.innerHTML=totalF
+    let totalF = total.reduce((a,b)=>a+b);
+    console.log(total)
+    totalPrice.innerHTML=totalF
+}
+calculateTotalPrice()
 })}
 
 console.log(total)
