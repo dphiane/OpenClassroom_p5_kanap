@@ -1,6 +1,6 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
-
+let total=[]
 for (let product of productLocalStorage) {//parcours localstorage
       let item = {//création variable du localstorage
         Id: product.productId,
@@ -88,17 +88,19 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
 
 //prix Total
   totalPrice=document.getElementById("totalPrice")
-  let total=0
-  for ( prod of productLocalStorage) {
-    const productTotal = product.price * item.quantity;
-    total = productTotal+total;
-  
-  console.log(productTotal)
-}
 
-totalPrice.innerHTML=total
+ 
+    const productTotal = parseInt(product.price) * item.quantity;
+    total.push(productTotal)
+    console.log(item.quantity)
+
+   let totalF = total.reduce((a,b)=>a+b);
+
+
+totalPrice.innerHTML=totalF
 })}
 
+console.log(total)
 
 
 
