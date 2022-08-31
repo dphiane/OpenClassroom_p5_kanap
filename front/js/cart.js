@@ -57,7 +57,7 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-              
+              calculateTotalPrice()
               updatequantity()
           }
 }
@@ -74,7 +74,7 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         const productToDeleteColor=removeProduct.dataset.color
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
-        
+        location.reload()
       })}
   //total quantité
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
@@ -106,8 +106,87 @@ function calculateTotalPrice(){
 calculateTotalPrice()
 })}
 
-let regexPrenom = /^[a-zA-Z\-]+$/
-let regexAdress = /[a-zA-Z0-9\s,'-]*$/
-let regexEmail = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
+
+
+
+//Formulaire
+let regexForm= document.querySelector(".cart__order__form")//Récupère le formulaire
+let validOrNot=false
+/*regex prenom nom ville*/
+let regexName = /^[a-zA-Z\é\è\ê\-]+$/ 
+let firstName=document.getElementById("firstName")
+let firstNameErrorMsg=document.getElementById("firstNameErrorMsg")
+
+//Ecoute le champ prenom & vérifie la regexName
+regexForm.firstName.addEventListener("input",function(){
+  let firstNameValid=regexName.test(this.value)
+    if (firstNameValid){
+      validOrNot=true
+      firstNameErrorMsg.innerHTML=""
+  }else{
+    validOrNot=false
+    firstNameErrorMsg.innerHTML="Votre prénom n'est pas valide"
+  }
+})
+//Ecoute le champ nom & vérifie la regexName
+let lastName=document.getElementById("lastName")
+let lastNameErrorMsg=document.getElementById("lastNameErrorMsg")
+
+regexForm.lastName.addEventListener("input",function(){
+  let lastNameValide=regexName.test(this.value)
+  if (lastNameValide){
+    validOrNot=true
+    lastNameErrorMsg.innerHTML=""
+  }else{
+    validOrNot=false
+    lastNameErrorMsg.innerHTML="Votre nom n'est pas valide"
+  }
+})
+//Ecoute le champ addresse & vérifie la regexAddress
+let regexAddress = /[a-zA-Z0-9\s,'-]+$/
+let address=document.getElementById("address")
+let addressErrorMsg=document.getElementById("addressErrorMsg")
+
+regexForm.address.addEventListener("input",function(){
+  let addressValid=regexAddress.test(this.value)
+  if(addressValid){
+    validOrNot=true
+    addressErrorMsg.innerHTML=""
+  }else{
+    validOrNot=false
+    addressErrorMsg.innerHTML="Votre adresse n'est pas valide"
+  }
+})
+//Ecoute le champ ville & vérifie la regexName
+let city=document.getElementById("city")
+let cityErrorMsg=document.getElementById("cityErrorMsg")
+
+regexForm.city.addEventListener("input",function(){
+  let cityValid=regexName.test(this.value)
+  if(cityValid){
+    validOrNot=true
+    cityErrorMsg.innerHTML=""
+  }else{
+    validOrNot=false
+    cityErrorMsg.innerHTML="Votre ville n'est pas valide"
+  }
+})
+
+//Ecoute le champ email & vérifie la regexEmail
+let regexEmail = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+let regexAdressmail= /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+let email=document.getElementById("email")
+let emailErrorMsg=document.getElementById("emailErrorMsg")
+
+regexForm.email.addEventListener("input",function(){
+  let emailValid=regexEmail.test(this.value)
+  if(emailValid){
+    validOrNot=true
+    emailErrorMsg.innerHTML=""
+  }else{
+    validOrNot=false
+    emailErrorMsg.innerHTML="Votre addresse email n'est pas valide"
+  }
+})
 
