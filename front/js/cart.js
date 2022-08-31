@@ -57,7 +57,8 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-
+              calculateTotalPrice()
+              updatequantity()
           }
 }
 })}
@@ -79,17 +80,21 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
  
 function updatequantity(){
-
-      let sumQuantityLocal=item.quantity
+      sumQuantityHtml.splice(0)
+      for(i=0;i < productLocalStorage.length;i++){
+        let quantityInLocalStorage= productLocalStorage[i].quantityProduct
+        let sumQuantityLocal=quantityInLocalStorage
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
-  console.log(sumQuantityHtml)
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
  const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML 
-}
+}}
 updatequantity()
+
+
 //prix Total
   totalPrice=document.getElementById("totalPrice")
+
 function calculateTotalPrice(){
     
     const productTotal = product.price * item.quantity;
