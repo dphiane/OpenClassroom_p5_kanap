@@ -57,7 +57,7 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-              calculateTotalPrice()
+              
               updatequantity()
           }
 }
@@ -106,7 +106,8 @@ function calculateTotalPrice(){
 calculateTotalPrice()
 })}
 
-console.log(total)
-
+let regexPrenom = /^[a-zA-Z\-]+$/
+let regexAdress = /[a-zA-Z0-9\s,'-]*$/
+let regexEmail = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
 
