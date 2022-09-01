@@ -29,14 +29,9 @@
         paragraph.classList.add("productDescription")
         paragraph.innerText=produit.description
 
-        let price=document.createElement("p")
-        price.classList.add("price")
-        price.innerText="Prix = "+ produit.price + "€"
-
         article.appendChild(image)
         article.appendChild(title)
         article.appendChild(paragraph)
-        article.appendChild(price)
         ancre.appendChild(article)
         
         items.appendChild(ancre)

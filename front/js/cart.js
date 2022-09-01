@@ -8,7 +8,7 @@ for (let product of productLocalStorage) {//parcours localstorage
         color: product.colorValue,
         quantity: product.quantityProduct,
 }
-         
+
 fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction de id
     .then(function(res) {
         if (res.ok) {
@@ -105,9 +105,6 @@ function calculateTotalPrice(){
 }
 calculateTotalPrice()
 })}
-
-
-
 
 
 //Formulaire
