@@ -14,7 +14,8 @@
 
     function insertProduitsHtml(produit){
         let ancre=document.createElement("a")
-        ancre.href="./produit.html?id=" + produit.__id
+        ancre.href="./product.html?id=" + produit._id
+        
 
         let article=document.createElement('article')
         let image=document.createElement('img')
