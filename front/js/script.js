@@ -1,40 +1,22 @@
-    let items= document.getElementById("items");//récuperez items dans HTML
+let items= document.getElementById("items");//récuperez items dans HTML
 
-    function getDataApi(){
-        fetch ("http://localhost:3000/api/products")
-        .then(response=>response.json())
-        .then(function(produits){
-            for (let produit of produits){
-                insertProduitsHtml(produit)
-            }
-        })
-    }
+const URL = "http://localhost:3000/api/products";
 
-    getDataApi()
+let cardsFetch= function(){
+fetch(URL)
+.then(response => response.json())
+.then((data) => {console.log(data)
 
-    function insertProduitsHtml(produit){
-        let ancre=document.createElement("a")
-        ancre.href="./product.html?id=" + produit._id
-        
-
-        let article=document.createElement('article')
-        let image=document.createElement('img')
-        image.src=produit.imageUrl
-        image.alt=produit.altTxt
-
-        let title=document.createElement("h3")
-        title.classList.add("productName")
-        title.innerText=produit.name
-
-        let paragraph= document.createElement('p')
-        paragraph.classList.add("productDescription")
-        paragraph.innerText=produit.description
-
-        article.appendChild(image)
-        article.appendChild(title)
-        article.appendChild(paragraph)
-        ancre.appendChild(article)
-        
-        items.appendChild(ancre)
-
-    }
+        for (i=0; i < data.length; i++){//Appel des produits dans le tableau
+            const PRODUCTCARD=`
+                <a href="./product.html?id=${data[i]._id}">
+                <article>
+                <img src="${data[i].imageUrl}" alt="${data[i].altTxt}">
+                <h3 class="productName">${data[i].name}</h3>
+                <p class="productDescription">${data[i].description}</p>
+                </article>
+                </a> -->`;
+            items.innerHTML +=PRODUCTCARD;//Ajout des constant HTML
+        }})
+    };
+    cardsFetch();//Appel fonction

@@ -1,7 +1,8 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
 let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
-let total=[]
+let total=0
+
 for (let product of productLocalStorage) {//parcours localstorage
       let item = {//création variable du localstorage
         Id: product.productId,
@@ -17,6 +18,8 @@ fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction
     })
 .then(function(product) {//retourne les caractéristiques des produits du panier
 
+totalPrice+=calculTotalOneProduct(product.price,item.quantity);
+console.log("la totalité "+ totalPrice);
     const PRODUCTCART=`
     <article class='cart__item' data-id='${item.Id}' data-color='${item.color}'>
     <div class='cart__item__img'>
@@ -26,7 +29,7 @@ fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction
       <div class='cart__item__content__description'>
         <h2>${product.name}</h2>
         <p>Couleur ${item.color} </p>
-        <p>${product.price}€</p>
+        <p>${calculTotalOneProduct (product.price,getQuantity)}€</p>
       </div>
       <div class='cart__item__content__settings'>
         <div class='cart__item__content__settings__quantity'>
@@ -41,6 +44,14 @@ fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 
+function getQuantity(){
+  return item.quantity;
+}
+function calculTotalOneProduct (price,quantity){
+  
+  return price * quantity;
+}
+console.log(calculTotalOneProduct(1000,5));
 /*Changement de quantité*/
 let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la class dans le dom
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
@@ -96,10 +107,10 @@ updatequantity()
   totalPrice=document.getElementById("totalPrice")
 
 function calculateTotalPrice(){
-    
+    totalF=0
+   
     const productTotal = product.price * item.quantity;
-    total.push(productTotal)
-    let totalF = total.reduce((a,b)=>a+b);
+    totalF = total.reduce((a,b)=>a+b);
     console.log(total)
     totalPrice.innerHTML=totalF
 }
