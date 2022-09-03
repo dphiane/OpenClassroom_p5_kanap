@@ -1,7 +1,6 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
 let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
-let total=0
 
 for (let product of productLocalStorage) {//parcours localstorage
       let item = {//création variable du localstorage
@@ -18,8 +17,6 @@ fetch("http://localhost:3000/api/products/" + item.Id)//appell l'api en fonction
     })
 .then(function(product) {//retourne les caractéristiques des produits du panier
 
-totalPrice+=calculTotalOneProduct(product.price,item.quantity);
-console.log("la totalité "+ totalPrice);
     const PRODUCTCART=`
     <article class='cart__item' data-id='${item.Id}' data-color='${item.color}'>
     <div class='cart__item__img'>
@@ -29,7 +26,7 @@ console.log("la totalité "+ totalPrice);
       <div class='cart__item__content__description'>
         <h2>${product.name}</h2>
         <p>Couleur ${item.color} </p>
-        <p>${calculTotalOneProduct (product.price,getQuantity)}€</p>
+        <p class='product__Price'>${product.price}€</p>
       </div>
       <div class='cart__item__content__settings'>
         <div class='cart__item__content__settings__quantity'>
@@ -44,14 +41,7 @@ console.log("la totalité "+ totalPrice);
   </article>`
 cartItem.innerHTML +=PRODUCTCART;//Ajout des constant HTML
 
-function getQuantity(){
-  return item.quantity;
-}
-function calculTotalOneProduct (price,quantity){
-  
-  return price * quantity;
-}
-console.log(calculTotalOneProduct(1000,5));
+
 /*Changement de quantité*/
 let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la class dans le dom
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
@@ -68,7 +58,7 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
           productLocalStorage[k].colorValue=== items.dataset.color){
             productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
-              calculateTotalPrice()
+              updateCartTotal()
               updatequantity()
           }
 }
@@ -81,8 +71,10 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         event.preventDefault()
         let removeProduct=deleteBtn[i].closest("article")
         removeProduct.remove()//supprimer du dom
+
         const productToDeleteId=removeProduct.dataset.id
         const productToDeleteColor=removeProduct.dataset.color
+
         let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
         location.reload()
@@ -98,24 +90,31 @@ function updatequantity(){
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
  const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
- totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML 
+ totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML
 }}
 updatequantity()
 
 
-//prix Total
-  totalPrice=document.getElementById("totalPrice")
-
-function calculateTotalPrice(){
-    totalF=0
-   
-    const productTotal = product.price * item.quantity;
-    totalF = total.reduce((a,b)=>a+b);
+function updateCartTotal(){
+  let cart__items=document.getElementById("cart__items")
+  let cart__item=cart__items.getElementsByClassName("cart__item")
+  console.log(cart__item)
+  let total=0
+  for ( let i= 0; i < cart__item.length; i++){
+    let article= cart__item[i];
+    let priceElement=article.getElementsByClassName("product__Price")[0];
+    let quantityElement=article.getElementsByClassName("itemQuantity")[0];
+    let price=parseInt(priceElement.innerText.replace('€',''))
+    let quantity=quantityElement.value
+    total = total + (price*quantity)
     console.log(total)
-    totalPrice.innerHTML=totalF
+  }
+  document.getElementById("totalPrice").innerHTML=total
 }
-calculateTotalPrice()
+updateCartTotal()
 })}
+
+
 
 
 //Formulaire
