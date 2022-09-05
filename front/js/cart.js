@@ -98,8 +98,8 @@ updatequantity()
 function updateCartTotal(){
   let cart__items=document.getElementById("cart__items")
   let cart__item=cart__items.getElementsByClassName("cart__item")
-  console.log(cart__item)
   let total=0
+  
   for ( let i= 0; i < cart__item.length; i++){
     let article= cart__item[i];
     let priceElement=article.getElementsByClassName("product__Price")[0];
@@ -107,7 +107,6 @@ function updateCartTotal(){
     let price=parseInt(priceElement.innerText.replace('€',''))
     let quantity=quantityElement.value
     total = total + (price*quantity)
-    console.log(total)
   }
   document.getElementById("totalPrice").innerHTML=total
 }
@@ -119,9 +118,9 @@ updateCartTotal()
 
 //Formulaire
 let regexForm= document.querySelector(".cart__order__form")//Récupère le formulaire
-let validOrNot=false
+
 /*regex prenom nom ville*/
-let regexName = /^[a-zA-Z\é\è\ê\-]+$/ 
+let regexName = /^[a-zA-Z\'\s\é\è\ê\-]{2,20}$/ 
 let firstName=document.getElementById("firstName")
 let firstNameErrorMsg=document.getElementById("firstNameErrorMsg")
 
@@ -129,13 +128,14 @@ let firstNameErrorMsg=document.getElementById("firstNameErrorMsg")
 regexForm.firstName.addEventListener("input",function(){
   let firstNameValid=regexName.test(this.value)
     if (firstNameValid){
-      validOrNot=true
+      
       firstNameErrorMsg.innerHTML=""
   }else{
-    validOrNot=false
+
     firstNameErrorMsg.innerHTML="Votre prénom n'est pas valide"
   }
 })
+
 //Ecoute le champ nom & vérifie la regexName
 let lastName=document.getElementById("lastName")
 let lastNameErrorMsg=document.getElementById("lastNameErrorMsg")
@@ -143,25 +143,25 @@ let lastNameErrorMsg=document.getElementById("lastNameErrorMsg")
 regexForm.lastName.addEventListener("input",function(){
   let lastNameValide=regexName.test(this.value)
   if (lastNameValide){
-    validOrNot=true
+   
     lastNameErrorMsg.innerHTML=""
   }else{
-    validOrNot=false
+   
     lastNameErrorMsg.innerHTML="Votre nom n'est pas valide"
   }
 })
 //Ecoute le champ addresse & vérifie la regexAddress
-let regexAddress = /[a-zA-Z0-9\s,'-]+$/
+let regexAddress = /[a-zA-Z0-9\s,'-]{5,80}$/
 let address=document.getElementById("address")
 let addressErrorMsg=document.getElementById("addressErrorMsg")
 
 regexForm.address.addEventListener("input",function(){
   let addressValid=regexAddress.test(this.value)
   if(addressValid){
-    validOrNot=true
+   
     addressErrorMsg.innerHTML=""
   }else{
-    validOrNot=false
+   
     addressErrorMsg.innerHTML="Votre adresse n'est pas valide"
   }
 })
@@ -172,28 +172,66 @@ let cityErrorMsg=document.getElementById("cityErrorMsg")
 regexForm.city.addEventListener("input",function(){
   let cityValid=regexName.test(this.value)
   if(cityValid){
-    validOrNot=true
+    
     cityErrorMsg.innerHTML=""
   }else{
-    validOrNot=false
+    
     cityErrorMsg.innerHTML="Votre ville n'est pas valide"
   }
 })
 
 //Ecoute le champ email & vérifie la regexEmail
-let regexEmail = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-let regexAdressmail= /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+let regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 let email=document.getElementById("email")
 let emailErrorMsg=document.getElementById("emailErrorMsg")
 
 regexForm.email.addEventListener("input",function(){
   let emailValid=regexEmail.test(this.value)
   if(emailValid){
-    validOrNot=true
+    
     emailErrorMsg.innerHTML=""
   }else{
-    validOrNot=false
+   
     emailErrorMsg.innerHTML="Votre addresse email n'est pas valide"
   }
 })
+
+
+let command=document.getElementById('order')
+
+command.addEventListener("click",(e)=>{
+e.preventDefault()
+  let idOfProductBuy=[]
+for (product of productLocalStorage){
+  idOfProductBuy.push(product.productId)
+}
+const commande= {
+  contact:{
+    firstName:document.getElementById('firstName').value,
+    lastName:document.getElementById('lastName').value,
+    address: document.getElementById('address').value,
+    city: document.getElementById('city').value,
+    email: document.getElementById('email').value,
+  },
+  products:idOfProductBuy,
+}
+console.log(commande)
+
+fetch("http://localhost:3000/api/products/order", {
+  method: 'POST',
+  headers: { 
+    "Content-Type": "application/json" 
+  },
+  body: JSON.stringify(commande),
+})
+  .then((res) => res.json())
+  .then((promise) => {
+    let responseServeur=promise
+    console.log(responseServeur)
+  })
+})
+
+
+
+
 
