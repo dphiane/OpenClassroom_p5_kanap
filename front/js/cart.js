@@ -118,71 +118,86 @@ updateCartTotal()
 })}
 
 
-
-
 //Formulaire
 let regexForm= document.querySelector(".cart__order__form")//Récupère le formulaire
+console.log(regexForm)
 
 /*regex prenom nom ville*/
 let regexName = /^[a-zA-Z\'\s\é\è\ê\-]{2,20}$/ 
 let firstName=document.getElementById("firstName")
 let firstNameErrorMsg=document.getElementById("firstNameErrorMsg")
-
 //Ecoute le champ prenom & vérifie la regexName
 regexForm.firstName.addEventListener("input",function(){
-  let firstNameValid=regexName.test(this.value)
-    if (firstNameValid){
-      
-      firstNameErrorMsg.innerHTML=""
-  }else{
-
-    firstNameErrorMsg.innerHTML="Votre prénom n'est pas valide"
-  }
+firstNameValid()
 })
+
+function firstNameValid(){
+  let firstNameValidity=regexName.test(firstName.value)
+  if (firstNameValidity){
+    firstNameErrorMsg.innerHTML=""
+    return true
+  }else{
+    console.log(firstNameValidity)
+    firstNameErrorMsg.innerHTML="Votre prénom n'est pas valide"
+    return false
+  }
+}
 
 //Ecoute le champ nom & vérifie la regexName
 let lastName=document.getElementById("lastName")
 let lastNameErrorMsg=document.getElementById("lastNameErrorMsg")
 
 regexForm.lastName.addEventListener("input",function(){
-  let lastNameValide=regexName.test(this.value)
-  if (lastNameValide){
-   
-    lastNameErrorMsg.innerHTML=""
-  }else{
-   
-    lastNameErrorMsg.innerHTML="Votre nom n'est pas valide"
-  }
+  lastNameValid()
 })
+
+function lastNameValid(){ 
+  let lastNameValidity=regexName.test(lastName.value)
+  if (lastNameValidity){
+    lastNameErrorMsg.innerHTML=""
+    return true
+  }else{
+    lastNameErrorMsg.innerHTML="Votre nom n'est pas valide"
+   return false
+}}
+
 //Ecoute le champ addresse & vérifie la regexAddress
 let regexAddress = /[a-zA-Z0-9\s,'-]{5,80}$/
 let address=document.getElementById("address")
 let addressErrorMsg=document.getElementById("addressErrorMsg")
 
 regexForm.address.addEventListener("input",function(){
-  let addressValid=regexAddress.test(this.value)
-  if(addressValid){
-   
-    addressErrorMsg.innerHTML=""
-  }else{
-   
-    addressErrorMsg.innerHTML="Votre adresse n'est pas valide"
-  }
+  addressValid()
 })
+
+function addressValid(){
+  let addressValidity=regexAddress.test(address.value)
+  if(addressValidity){
+    addressErrorMsg.innerHTML=""
+    return true
+  }else{
+    addressErrorMsg.innerHTML="Votre adresse n'est pas valide"
+    return false
+  }
+}
 //Ecoute le champ ville & vérifie la regexName
 let city=document.getElementById("city")
 let cityErrorMsg=document.getElementById("cityErrorMsg")
 
 regexForm.city.addEventListener("input",function(){
-  let cityValid=regexName.test(this.value)
-  if(cityValid){
-    
-    cityErrorMsg.innerHTML=""
-  }else{
-    
-    cityErrorMsg.innerHTML="Votre ville n'est pas valide"
-  }
+  cityValid()
 })
+
+  function cityValid(){
+  let cityValidity=regexName.test(city.value)
+  if(cityValidity){
+    cityErrorMsg.innerHTML=""
+    return true
+  }else{
+    cityErrorMsg.innerHTML="Votre ville n'est pas valide"
+    return false
+  }
+}
 
 //Ecoute le champ email & vérifie la regexEmail
 let regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
@@ -190,22 +205,25 @@ let email=document.getElementById("email")
 let emailErrorMsg=document.getElementById("emailErrorMsg")
 
 regexForm.email.addEventListener("input",function(){
-  let emailValid=regexEmail.test(this.value)
-  if(emailValid){
-    
-    emailErrorMsg.innerHTML=""
-  }else{
-   
-    emailErrorMsg.innerHTML="Votre addresse email n'est pas valide"
-  }
+  emailValid()
 })
-
-
+function emailValid(){
+  let emailValidity=regexEmail.test(email.value)
+  if(emailValidity){
+    emailErrorMsg.innerHTML=""
+    return true
+  }else{
+    emailErrorMsg.innerHTML="Votre addresse email n'est pas valide"
+    return false
+  }
+}
 let command=document.getElementById('order')
-
-command.addEventListener("click",(e)=>{
-e.preventDefault()
-  let idOfProductBuy=[]
+console.log(command)
+command.addEventListener("click", function(e){
+  e.preventDefault()
+   if (firstNameValid() && lastNameValid() && addressValid() && cityValid() && emailValid()){
+    console.log("valide")
+    let idOfProductBuy=[]
 for (product of productLocalStorage){
   idOfProductBuy.push(product.productId)
 }
@@ -237,9 +255,9 @@ fetch("http://localhost:3000/api/products/order", {
     //localStorage.clear()
     window.location.href= "confirmation.html?orderId=" + responseServeur.orderId
   })
+
+
+}else{
+    console.log("non valide")
+  } 
 })
-
-
-
-
-
