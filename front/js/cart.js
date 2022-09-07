@@ -1,6 +1,6 @@
 let cartItem= document.getElementById("cart__items")// récupère la div cart__items
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));//Json vers javascript
-let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
+
 
 for (let product of productLocalStorage) {//parcours localstorage
       let item = {//création variable du localstorage
@@ -79,30 +79,34 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
         location.reload()
       })}
+
+
   //total quantité
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
- 
+  let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
+  //fonction mise a jour quantité total
 function updatequantity(){
-      sumQuantityHtml.splice(0)
+      sumQuantityHtml.splice(0)// remise a zero du tableau sumQuantityHtml
       for(i=0;i < productLocalStorage.length;i++){
-        let quantityInLocalStorage= productLocalStorage[i].quantityProduct
+        let quantityInLocalStorage= productLocalStorage[i].quantityProduct// attribut la quantité du localstorage a la variable quantityInLocalStorage
         let sumQuantityLocal=quantityInLocalStorage
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
- const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)
+ const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)//0=valeur defaut
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML
 }}
 updatequantity()
 
-
+//fonction mise a jour prix total
 function updateCartTotal(){
   let cart__items=document.getElementById("cart__items")
   let cart__item=cart__items.getElementsByClassName("cart__item")
   let total=0
   
-  for ( let i= 0; i < cart__item.length; i++){
-    let article= cart__item[i];
+  for ( let i= 0; i < cart__item.length; i++){//boucle sur le nombre d'article du panier
+    let article= cart__item[i];//me permet de récupérer l'article HTML du produit concerné
     let priceElement=article.getElementsByClassName("product__Price")[0];
+    console.log(priceElement)
     let quantityElement=article.getElementsByClassName("itemQuantity")[0];
     let price=parseInt(priceElement.innerText.replace('€',''))
     let quantity=quantityElement.value
@@ -219,15 +223,19 @@ console.log(commande)
 
 fetch("http://localhost:3000/api/products/order", {
   method: 'POST',
-  headers: { 
-    "Content-Type": "application/json" 
-  },
   body: JSON.stringify(commande),
+  headers: { 
+    "Content-Type" : "application/json",
+
+  },
+  
 })
   .then((res) => res.json())
   .then((promise) => {
     let responseServeur=promise
     console.log(responseServeur)
+    //localStorage.clear()
+    window.location.href= "confirmation.html?orderId=" + responseServeur.orderId
   })
 })
 
