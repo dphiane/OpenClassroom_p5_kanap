@@ -47,9 +47,9 @@ let inputQuantity=document.querySelectorAll(".itemQuantity")// récupère la cla
 for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les itemQuantité
   inputQuantity[i].addEventListener("change",(event)=>{
     let newValue=event.target.value//on écoute la valeur ciblé
-    if (newValue<=0 || newValue >=100 ||isNaN(newValue)){
+    if (newValue<=0 || newValue >=100 ||isNaN(newValue)){// quantité entre 1 et 100
       alert ("Veuillez choisir une quantité entre 1 et 100")
-      newValue=1
+      newValue=1 // valeur par defaut
     }
     let items=inputQuantity[i].closest("article")//sert à récupérer l'objet le plus proche
 
@@ -75,7 +75,7 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
         const productToDeleteId=removeProduct.dataset.id
         const productToDeleteColor=removeProduct.dataset.color
 
-        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs
+        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs puis filtre le produit
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
         location.reload()
       })}
@@ -101,14 +101,13 @@ updatequantity()
 function updateCartTotal(){
   let cart__items=document.getElementById("cart__items")
   let cart__item=cart__items.getElementsByClassName("cart__item")
-  let total=0
+  let total=0 //total de 0 par defaut
   
   for ( let i= 0; i < cart__item.length; i++){//boucle sur le nombre d'article du panier
     let article= cart__item[i];//me permet de récupérer l'article HTML du produit concerné
-    let priceElement=article.getElementsByClassName("product__Price")[0];
-    console.log(priceElement)
-    let quantityElement=article.getElementsByClassName("itemQuantity")[0];
-    let price=parseInt(priceElement.innerText.replace('€',''))
+    let priceElement=article.getElementsByClassName("product__Price")[0];// prix html
+    let quantityElement=article.getElementsByClassName("itemQuantity")[0];// input quantité
+    let price=parseInt(priceElement.innerText.replace('€',''))// supprime € remplace par "rien"
     let quantity=quantityElement.value
     total = total + (price*quantity)
   }
@@ -120,37 +119,36 @@ updateCartTotal()
 
 //Formulaire
 let regexForm= document.querySelector(".cart__order__form")//Récupère le formulaire
-console.log(regexForm)
 
 /*regex prenom nom ville*/
 let regexName = /^[a-zA-Z\'\s\é\è\ê\-]{2,20}$/ 
 let firstName=document.getElementById("firstName")
 let firstNameErrorMsg=document.getElementById("firstNameErrorMsg")
+
 //Ecoute le champ prenom & vérifie la regexName
 regexForm.firstName.addEventListener("input",function(){
 firstNameValid()
 })
-
+//fonction pour le prenom
 function firstNameValid(){
   let firstNameValidity=regexName.test(firstName.value)
   if (firstNameValidity){
     firstNameErrorMsg.innerHTML=""
     return true
   }else{
-    console.log(firstNameValidity)
     firstNameErrorMsg.innerHTML="Votre prénom n'est pas valide"
     return false
   }
 }
-
-//Ecoute le champ nom & vérifie la regexName
+//regex Nom
 let lastName=document.getElementById("lastName")
 let lastNameErrorMsg=document.getElementById("lastNameErrorMsg")
 
+//Ecoute le champ nom & vérifie la regexName
 regexForm.lastName.addEventListener("input",function(){
   lastNameValid()
 })
-
+// fonction pour le nom
 function lastNameValid(){ 
   let lastNameValidity=regexName.test(lastName.value)
   if (lastNameValidity){
@@ -160,16 +158,16 @@ function lastNameValid(){
     lastNameErrorMsg.innerHTML="Votre nom n'est pas valide"
    return false
 }}
-
-//Ecoute le champ addresse & vérifie la regexAddress
+//regex Adresse
 let regexAddress = /[a-zA-Z0-9\s,'-]{5,80}$/
 let address=document.getElementById("address")
 let addressErrorMsg=document.getElementById("addressErrorMsg")
 
+//Ecoute le champ addresse & vérifie la regexAddress
 regexForm.address.addEventListener("input",function(){
   addressValid()
 })
-
+//fonction addresse
 function addressValid(){
   let addressValidity=regexAddress.test(address.value)
   if(addressValidity){
@@ -180,14 +178,16 @@ function addressValid(){
     return false
   }
 }
-//Ecoute le champ ville & vérifie la regexName
+
+// regex ville
 let city=document.getElementById("city")
 let cityErrorMsg=document.getElementById("cityErrorMsg")
 
+//Ecoute le champ ville & vérifie la regexName
 regexForm.city.addEventListener("input",function(){
   cityValid()
 })
-
+//fonction ville
   function cityValid(){
   let cityValidity=regexName.test(city.value)
   if(cityValidity){
@@ -199,14 +199,16 @@ regexForm.city.addEventListener("input",function(){
   }
 }
 
-//Ecoute le champ email & vérifie la regexEmail
+//regex email
 let regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 let email=document.getElementById("email")
 let emailErrorMsg=document.getElementById("emailErrorMsg")
 
+//Ecoute le champ email & vérifie la regexEmail
 regexForm.email.addEventListener("input",function(){
   emailValid()
 })
+//fonction email
 function emailValid(){
   let emailValidity=regexEmail.test(email.value)
   if(emailValidity){
@@ -217,17 +219,17 @@ function emailValid(){
     return false
   }
 }
+
 let command=document.getElementById('order')
-console.log(command)
+// ecoute le bouton commander
 command.addEventListener("click", function(e){
   e.preventDefault()
-   if (firstNameValid() && lastNameValid() && addressValid() && cityValid() && emailValid()){
-    console.log("valide")
-    let idOfProductBuy=[]
+   if (firstNameValid() && lastNameValid() && addressValid() && cityValid() && emailValid()){// vérifie si tout les inputs sont valide
+    let idOfProductBuy=[]// tableau pour les produits avec leurs id
 for (product of productLocalStorage){
-  idOfProductBuy.push(product.productId)
+  idOfProductBuy.push(product.productId)// push les id du localStorage dans le tableau
 }
-const commande= {
+const commande= {// constante pour le back end avec les infos du formulaire
   contact:{
     firstName:document.getElementById('firstName').value,
     lastName:document.getElementById('lastName').value,
@@ -237,27 +239,22 @@ const commande= {
   },
   products:idOfProductBuy,
 }
-console.log(commande)
-
+//fetch Post du tableau commande
 fetch("http://localhost:3000/api/products/order", {
   method: 'POST',
   body: JSON.stringify(commande),
   headers: { 
     "Content-Type" : "application/json",
-
   },
-  
 })
   .then((res) => res.json())
   .then((promise) => {
     let responseServeur=promise
-    console.log(responseServeur)
-    //localStorage.clear()
-    window.location.href= "confirmation.html?orderId=" + responseServeur.orderId
+    localStorage.clear()//  vide le local Storage
+    window.location.href= "confirmation.html?orderId=" + responseServeur.orderId //redirection vers la page confirmation
   })
 
-
-}else{
+}else{//si le formulaire mal ou pas remplis 
     console.log("non valide")
   } 
 })
