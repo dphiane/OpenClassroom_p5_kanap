@@ -37,8 +37,8 @@ fetch(URL+id)
 .then(response => response.json())
 .then(data => {
 //condition quantité
-if(quantity.value<=0){
-  alert("Veuillez indiquer la quantité souhaité")
+if(quantity.value<=0 ||quantity.value > 100){
+  alert("Veuillez indiquer la quantité souhaité comprise entre 1 et 100")
 }
 //condition couleur
 else if (colors.value==0){

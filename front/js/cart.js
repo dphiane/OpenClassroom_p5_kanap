@@ -90,9 +90,12 @@ function updatequantity(){
       for(i=0;i < productLocalStorage.length;i++){
         let quantityInLocalStorage= productLocalStorage[i].quantityProduct// attribut la quantité du localstorage a la variable quantityInLocalStorage
         let sumQuantityLocal=quantityInLocalStorage
+        
       sumQuantityHtml.push(sumQuantityLocal)//ajout les quantitées dans sumQuantityHtml
+
  const reducerQuantity=(accumulator,currentValue)=>accumulator+currentValue//methode reduce = réduit les valeurs d'une liste à une seule valeur
  const totalQuantityInCart=sumQuantityHtml.reduce(reducerQuantity,0)//0=valeur defaut
+
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML
 }}
 updatequantity()
