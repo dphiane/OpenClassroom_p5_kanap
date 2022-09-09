@@ -15,7 +15,7 @@ fetch(URL)
                 <h3 class="productName">${data[i].name}</h3>
                 <p class="productDescription">${data[i].description}</p>
                 </article>
-                </a> -->`;
+                </a>`;
             items.innerHTML +=PRODUCTCARD;//Ajout des constant HTML
         }})
     };
