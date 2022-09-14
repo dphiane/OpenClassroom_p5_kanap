@@ -1,9 +1,6 @@
 let items= document.getElementById("items");//récuperez items dans HTML
 
-const URL = "http://localhost:3000/api/products";
-
-let cardsFetch= function(){
-fetch(URL)
+fetch("http://localhost:3000/api/products")
 .then(response => response.json())
 .then((data) => {console.log(data)
 
@@ -17,6 +14,5 @@ fetch(URL)
                 </article>
                 </a>`;
             items.innerHTML +=PRODUCTCARD;//Ajout des constant HTML
-        }})
-    };
-    cardsFetch();//Appel fonction
+
+        }});

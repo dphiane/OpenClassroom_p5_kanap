@@ -56,10 +56,10 @@ for (let i =0; i<inputQuantity.length; i++){//on fait une boucle de tous les ite
       for (let k in productLocalStorage){
         if (productLocalStorage[k].productId=== items.dataset.id &&//compare id & couleur
           productLocalStorage[k].colorValue=== items.dataset.color){
-            productLocalStorage[k].quantityProduct= parseInt(newValue),// change la nouvelle valeur du dom vers le local storage
+            productLocalStorage[k].quantityProduct= parseInt(newValue),// change le string quantity en nombre
             localStorage.setItem("product",JSON.stringify(productLocalStorage))//envoie au local storage
               updateCartTotal()
-              updatequantity()
+              updateQuantity()
           }
 }
 })}
@@ -74,10 +74,11 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
 
         const productToDeleteId=removeProduct.dataset.id
         const productToDeleteColor=removeProduct.dataset.color
-
-        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)//compare les id & couleurs puis filtre le produit
+        //compare les id & couleurs puis filtre le produit
+        let productToRemove=productLocalStorage.filter((el) => el.productId !=productToDeleteId || el.colorValue !=productToDeleteColor)
         localStorage.setItem("product",JSON.stringify(productToRemove))//envoie au local storage
         location.reload()
+
       })}
 
 
@@ -85,7 +86,7 @@ for (let i=0; i< deleteBtn.length;i++){//boucle sur les boutons
   totalQuantity= document.getElementById('totalQuantity')//récupère l'id total quantité
   let sumQuantityHtml=[]//création d'un tableau vide pour les quantitées
   //fonction mise a jour quantité total
-function updatequantity(){
+function updateQuantity(){
       sumQuantityHtml.splice(0)// remise a zero du tableau sumQuantityHtml
       for(i=0;i < productLocalStorage.length;i++){
         let quantityInLocalStorage= productLocalStorage[i].quantityProduct// attribut la quantité du localstorage a la variable quantityInLocalStorage
@@ -98,7 +99,7 @@ function updatequantity(){
 
  totalQuantity.innerHTML=totalQuantityInCart//ajout de la valeur dans le HTML
 }}
-updatequantity()
+updateQuantity()
 
 //fonction mise a jour prix total
 function updateCartTotal(){
