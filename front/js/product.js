@@ -67,8 +67,7 @@ if(productLocalStorage){
   )
 if(alreadyIn){//si est deja la alors on additionne le produit + celui dans le localstorage
   let fixQuantity =
-          parseInt(productToCart.quantityProduct) +
-          parseInt(alreadyIn.quantityProduct);
+        parseInt(productToCart.quantityProduct) + parseInt(alreadyIn.quantityProduct);
         alreadyIn.quantityProduct = fixQuantity;
         localStorage.setItem("product", JSON.stringify(productLocalStorage));
 }
