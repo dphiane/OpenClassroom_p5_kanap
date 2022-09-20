@@ -1,95 +1,96 @@
-const queryString_URL_Id= window.location.search;//récupérer chaine de l'url apres "?" par id dans la page window
+//récupère id dans URL
+const queryString_URL_Id = window.location.search;
+const urlSearchParams = new URLSearchParams(queryString_URL_Id);
+const id = urlSearchParams.get("id");
 
-const urlSearchParams= new URLSearchParams(queryString_URL_Id);//recherche parametre
+let URL = "http://localhost:3000/api/products/";
 
-const id= urlSearchParams.get("id");//(recupère "l'id")
+let cardsFetch = function () {
+  fetch(URL + id)
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementsByClassName("item__img")[0].innerHTML += `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
+      document.getElementById("title").innerHTML = `${data.name}`;
+      document.getElementById("description").innerHTML = `${data.description}`;
+      document.getElementById("price").innerHTML = `${data.price}`;
 
-let URL = "http://localhost:3000/api/products/"
-    
-let cardsFetch= function(){
-  fetch(URL+id)
-  .then(response => response.json())
-  .then(data => {console.log(data) 
+      // création option couleur
+      for (let i = 0; i < data.colors.length; i++) {
+        let select = document.getElementById("colors");
+        let option = document.createElement("option");
 
-document.getElementsByClassName("item__img")[0].innerHTML += `<img src="${data.imageUrl}" alt="${data.altTxt}">`//ajout image 
-document.getElementById('title').innerHTML=`${data.name}`//ajout titre
-document.getElementById('description').innerHTML=`${data.description}`//ajout description
-document.getElementById('price').innerHTML=`${data.price}`//ajout prix
+        option.innerHTML = `${data.colors[i]}`;
+        option.value = `${data.colors[i]}`;
 
-for (let i=0; i<data.colors.length;i++){//tableau a parcourir par i pour les options 
-  let select=document.getElementById('colors')//selection de la partie choisi une couleur
-  let option= document.createElement ('option')// création des options de couleur
+        select.appendChild(option);
+      }
+    });
+};
 
-  option.innerHTML=`${data.colors[i]}`// ajout des options de couleur dans HTML
-  option.value=`${data.colors[i]}`// ajout de la valeur des couleur back
+cardsFetch();
 
-  select.appendChild(option)// option enfant de select
-}
-})} 
+// bouton ajout panier, condition couleur & quantitée
+let addToCart = document.getElementById("addToCart");
+addToCart.addEventListener("click", (event) => {
+  event.preventDefault();
 
-cardsFetch()
-// Ecoute du bouton ajouter au panier
-let addToCart=document.getElementById("addToCart")
-addToCart.addEventListener("click",(event)=>{
-event.preventDefault();
+  fetch(URL + id)
+    .then((response) => response.json())
+    .then((data) => {
+      if (quantity.value <= 0 || quantity.value > 100) {
+        alert("Veuillez indiquer la quantité souhaité comprise entre 1 et 100");
+      } else if (colors.value == 0) {
+        alert("Veuillez indiquer la couleur souhaité");
+      } else {
+        let productToCart = {
+          productId: `${data._id}`,
+          colorValue: colors.value,
+          quantityProduct: Number(quantity.value),
+        };
 
-fetch(URL+id)
-.then(response => response.json())
-.then(data => {
-//condition quantité
-if(quantity.value<=0 ||quantity.value > 100){
-  alert("Veuillez indiquer la quantité souhaité comprise entre 1 et 100")
-}
-//condition couleur
-else if (colors.value==0){
-  alert("Veuillez indiquer la couleur souhaité")
-}
-else{//si quantité & couleur Ok alors crée produit panier
-//Création variable du tableau contenant les informations du produit pour le panier
-let productToCart={
-  productId:`${data._id}`,
-  colorValue:colors.value,
-  quantityProduct:Number(quantity.value),
-  imgProduct:`${data.imageUrl}`,
-  altProduct:`${data.altTxt}`,
-  productName:`${data.name}`,
-} 
+        // localStorage + condition addition ou non
+        let productLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-//création de la variable des produits du panier qui sera stockée dans le local storage
-let productLocalStorage=JSON.parse(localStorage.getItem("product"));
+        if (productLocalStorage) {
+          const alreadyIn = productLocalStorage.find(
+            (obj) =>
+              obj.productId === productToCart.productId &&
+              obj.colorValue === productToCart.colorValue
+          );
+          if (alreadyIn) {
+            let fixQuantity =
+              parseInt(productToCart.quantityProduct) +
+              parseInt(alreadyIn.quantityProduct);
+            alreadyIn.quantityProduct = fixQuantity;
+            localStorage.setItem(
+              "product",
+              JSON.stringify(productLocalStorage)
+            );
+          } else {
+            productLocalStorage.push(productToCart);
+            localStorage.setItem(
+              "product",
+              JSON.stringify(productLocalStorage)
+            );
+          }
+        } else {
+          productLocalStorage = [];
+          productLocalStorage.push(productToCart);
+          localStorage.setItem("product", JSON.stringify(productLocalStorage));
+        }
 
-//s'il a deja des produits enregistrés dans le local storage
-if(productLocalStorage){
-  const alreadyIn = productLocalStorage.find(//création constant pour vérifier si les id & couleurs sont =
-    (obj) =>
-      obj.productId === productToCart.productId &&
-      obj.colorValue ===productToCart.colorValue
-  )
-if(alreadyIn){//si est deja la alors on additionne le produit + celui dans le localstorage
-  let fixQuantity =
-        parseInt(productToCart.quantityProduct) + parseInt(alreadyIn.quantityProduct);
-        alreadyIn.quantityProduct = fixQuantity;
-        localStorage.setItem("product", JSON.stringify(productLocalStorage));
-}
-else{//si id & couleur != alors ajoute un nouveau produit
-  productLocalStorage.push(productToCart);//sinon ajoute seulement le produit
-  localStorage.setItem("product", JSON.stringify(productLocalStorage));
-} 
-}
-
-else{// si il n y a pas de produit d'enregistré dans le local storage
-  productLocalStorage=[];
-  productLocalStorage.push(productToCart);
-  localStorage.setItem("product",JSON.stringify(productLocalStorage));
-} 
-// fenêtre d'affichage de confirmation
-let popUpConfirm=function(){
-  if (window.confirm(`${data.name} de la couleur ${colors.value} a bien été ajouter au panier
-Pour continuer vos achats cliquer sur OK ou ANNULER pour aller au panier`)){
-  window.location.href= "index.html"
-  }else{
-  window.location.href= "cart.html"
-  }
-}
-popUpConfirm()
-}})})
+        // fenêtre d'affichage de confirmation
+        let popUpConfirm = function () {
+          if (
+            window.confirm(`${data.name} de la couleur ${colors.value} a bien été ajouter au panier
+            Pour continuer vos achats cliquer sur OK ou ANNULER pour aller au panier`)
+          ) {
+            window.location.href = "index.html";
+          } else {
+            window.location.href = "cart.html";
+          }
+        };
+        popUpConfirm();
+      }
+    });
+});

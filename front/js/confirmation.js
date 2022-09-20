@@ -1,5 +1,6 @@
-const orderId =window.location.search// récupère dans l'url la partie ?orderId
-const urlSearchParams= new URLSearchParams(orderId)// récupère la partie search de l'url donc orderId-->...
-const numberCommand=urlSearchParams.get("orderId")//selectionne l'orderId
+//ajout orderId dans HTML
+const orderId =window.location.search
+const urlSearchParams= new URLSearchParams(orderId)
+const numberCommand=urlSearchParams.get("orderId")
 
-document.getElementById("orderId").innerHTML=numberCommand// ajout de l'orderId dans la partie votre numéro de commande
+document.getElementById("orderId").innerHTML=numberCommand
